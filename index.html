@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Валентинка ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: filter 0.5s ease;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgb(255, 255, 255);
+            border-radius: 30px;
+            padding: 40px 20px;
+
+            text-align: center;
+            backdrop-filter: blur(10px);
+
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hearts-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.2;
+            animation: heartFloat 6s ease-in-out infinite;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        .image-container {
+            width: 210px;
+            height: 210px;
+            margin: 0 auto 30px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 105, 180, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            transform: scale(1);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(255, 75, 43, 0.6);
+        }
+
+        .btn-no {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: white;
+            transform: scale(1);
+        }
+
+        .btn-no:hover:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .message {
+            margin-top: 30px;
+            font-size: 24px;
+            color: #fff;
+            font-weight: bold;
+            min-height: 60px;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 105, 180, 0.3);
+            padding: 15px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .wish-text {
+            margin-top: 30px;
+            color: white;
+            font-size: 22px;
+            line-height: 1.6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 105, 180, 0.3);
+            padding: 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            font-style: italic;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .wish-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wish-text span {
+            display: block;
+            margin-top: 15px;
+            font-size: 28px;
+        }
+
+        .counter {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
+
+        .buttons.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            margin-top: 0;
+            max-height: 0;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            .image-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 18px;
+            }
+
+            .wish-text {
+                font-size: 18px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-background">
+        <img src="https://avatars.mds.yandex.net/i?id=c74593f349549cfb479242f8ecb554b2c8f8b565-9051257-images-thumbs&n=13"
+            alt="Romantic background">
+    </div>
+    <div class="overlay"></div>
+
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <div class="container">
+        <div class="image-container" id="imageContainer">
+            <img src="https://media.tenor.com/AKU92lOacLUAAAAm/peach-goma.webp" alt="Happy couple" id="gif">
+        </div>
+
+        <h1 id="question">Будешь моей валентинкой?</h1>
+
+        <div class="buttons" id="buttons">
+            <button class="btn btn-yes" id="yesBtn" aria-label="Согласиться">
+                ДА ❤️
+            </button>
+            <button class="btn btn-no" id="noBtn" aria-label="Отказаться">
+                НЕТ 💔
+            </button>
+        </div>
+
+        <div class="message" id="message"></div>
+        <div class="counter" id="counter"></div>
+
+        <div class="wish-text" id="wishText">
+            С днём Святого Валентина! <br>
+            Солнышко мое, желаю тебе счастья,<br>
+            море улыбок, чтобы каждый день<br>
+            был наполнен радостью.<br>
+            <span>Спасибо за то ты со мной 💗</span>
+        </div>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        const maxNoClicks = 3;
+        let isAnswered = false;
+        let currentNoImageIndex = 0;
+
+        const imageContainer = document.getElementById('imageContainer');
+        const gifElement = document.getElementById('gif');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const messageEl = document.getElementById('message');
+        const counterEl = document.getElementById('counter');
+        const backgroundImg = document.querySelector('.video-background img');
+        const buttons = document.querySelector('.buttons');
+        const wishText = document.getElementById('wishText');
+        const question = document.getElementById('question');
+
+        const noImages = [
+            'https://media.tenor.com/BbSkyx3DaEgAAAAM/goma-sad.gif',
+            'https://media.tenor.com/ti6jDf8qC5IAAAAm/peach-and-goma-goma.webp',
+            'https://media.tenor.com/PAyE85Ez53oAAAAm/mochi-mochimochi.webp'
+        ];
+
+        const yesImages = [
+            'https://media.tenor.com/2sK4kSCq240AAAAm/peach-goma-love-peach-goma.webp'
+        ];
+
+        wishText.classList.remove('show');
+
+        function createHearts() {
+            const heartsBg = document.getElementById('heartsBg');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = Math.random() * 30 + 10 + 'px';
+                heart.innerHTML = ['❤️', '💖', '💕', '💗', '💓'][Math.floor(Math.random() * 5)];
+                heartsBg.appendChild(heart);
+            }
+        }
+
+        function changeImage(type) {
+            if (type === 'yes') {
+                gifElement.src = yesImages[0];
+                gifElement.alt = 'Happy couple';
+                backgroundImg.src = 'https://avatars.mds.yandex.net/i?id=c74593f349549cfb479242f8ecb554b2c8f8b565-9051257-images-thumbs&n=13';
+                backgroundImg.style.filter = 'brightness(0.8)';
+            } else if (type === 'no') {
+                gifElement.src = noImages[currentNoImageIndex];
+                gifElement.alt = 'Sad couple';
+                currentNoImageIndex = (currentNoImageIndex + 1) % noImages.length;
+                imageContainer.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    imageContainer.style.animation = '';
+                }, 500);
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                50% { transform: translateX(10px); }
+                75% { transform: translateX(-5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function handleYes() {
+            if (isAnswered) return;
+
+            isAnswered = true;
+
+            changeImage('yes');
+
+            messageEl.innerHTML = 'Валентинка 💌';
+            messageEl.style.display = 'block';
+
+            question.style.opacity = '0';
+            setTimeout(() => {
+                question.style.display = 'none';
+            }, 500);
+
+            buttons.classList.add('hidden');
+
+            counterEl.style.display = 'none';
+
+            setTimeout(() => {
+                wishText.classList.add('show');
+            }, 300);
+
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+        }
+
+        function handleNo() {
+            if (isAnswered) return;
+
+            noClickCount++;
+
+            changeImage('no');
+
+            const noScale = 1 - (noClickCount * 0.15);
+            noBtn.style.transform = `scale(${Math.max(0.6, noScale)})`;
+
+            const yesScale = 1 + (noClickCount * 0.1);
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            const messages = [
+                'Подумай еще...',
+                'Ну пожалуйста...',
+                'Не будь такой жестокой!',
+                'Ты разбиваешь мне сердце...'
+            ];
+            messageEl.innerHTML = messages[Math.min(noClickCount - 1, messages.length - 1)];
+            messageEl.style.display = 'block';
+
+            counterEl.innerHTML = `Осталось попыток: ${maxNoClicks - noClickCount}`;
+
+            if (noClickCount >= maxNoClicks) {
+                noBtn.style.display = 'none';
+                messageEl.innerHTML = 'ДА!';
+                yesBtn.style.transform = `scale(${1 + (maxNoClicks * 0.1) + 0.2})`;
+            }
+        }
+
+        createHearts();
+
+        yesBtn.addEventListener('click', handleYes);
+        noBtn.addEventListener('click', handleNo);
+
+        yesBtn.addEventListener('mouseenter', () => {
+            if (!isAnswered) {
+                yesBtn.style.transform = `scale(${1.1 + (noClickCount * 0.1)})`;
+            }
+        });
+
+        yesBtn.addEventListener('mouseleave', () => {
+            if (!isAnswered) {
+                yesBtn.style.transform = `scale(${1 + (noClickCount * 0.1)})`;
+            }
+        });
+
+        yesBtn.addEventListener('selectstart', (e) => e.preventDefault());
+        noBtn.addEventListener('selectstart', (e) => e.preventDefault());
+    </script>
+</body>
+
+</html>
